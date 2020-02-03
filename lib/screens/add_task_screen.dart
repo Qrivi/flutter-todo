@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:todoey/models/app_state.dart';
+import 'package:todoey/models/task.dart';
 
 class AddTaskScreen extends StatefulWidget {
   @override
@@ -13,6 +16,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     'Feed the fish',
   ]..shuffle())
       .first;
+
+  TextEditingController _controller = new TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +54,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  // nop
+                  Navigator.pop(context);
                 },
               ),
               MaterialButton(
@@ -55,7 +66,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  // nop
+                  Provider.of<AppState>(context, listen: false).addTask(Task(name: this._controller.text));
+                  Navigator.pop(context);
                 },
               ),
             ],
@@ -63,6 +75,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           TextField(
             autofocus: true,
             maxLines: 1,
+            controller: _controller,
             decoration: InputDecoration(
               hintText: _placeholder,
             ),
